@@ -26,7 +26,7 @@ function App() {
     // Simulate API fetch
     setTimeout(() => {
       setUsers([
-        { id: "uuid-1", username: "user1", email: "user1@example.com", preferred_category_id: "cat-1",  device_identifier: "MAC-001", last_active_at: "2025-04-02T10:30:00" },
+        { id: "uuid-1", username: "assaker", email: "user1@example.com", preferred_category_id: "cat-1",  device_identifier: "MAC-001", last_active_at: "2025-04-02T10:30:00" },
         { id: "uuid-2", username: "user2", email: "user2@example.com", preferred_category_id: "cat-2",  device_identifier: "MAC-002", last_active_at: "2025-04-02T09:15:00" },
         { id: "uuid-3", username: "user3", email: "user3@example.com", preferred_category_id: "cat-1", device_identifier: "MAC-003", last_active_at: "2025-04-01T16:45:00" },
       ]);
