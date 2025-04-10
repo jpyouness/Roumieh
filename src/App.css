@@ -63,7 +63,7 @@ body {
 }
 
 .content-wrapper {
-  max-width: 1200px;
+  max-width: 12000px;
   margin: 0 auto;
   background-color: #fff;
   border-radius: 12px;
@@ -238,7 +238,14 @@ body {
   display: flex;
   gap: 0.5rem;
   text-align: right;
-  /*margin-left: 120px;*/
+  margin-left: 195px;
+}
+
+.action-buttons_Edit_Users {
+  display: flex;
+  gap: 0.5rem;
+  text-align: right;
+  margin-left: 80px;
 }
 
 .action-btn {

@@ -26,15 +26,15 @@ function App() {
     // Simulate API fetch
     setTimeout(() => {
       setUsers([
-        { id: "uuid-1", username: "assaker", email: "user1@example.com", preferred_category_id: "cat-1",  device_identifier: "MAC-001", last_active_at: "2025-04-02T10:30:00" },
-        { id: "uuid-2", username: "user2", email: "user2@example.com", preferred_category_id: "cat-2",  device_identifier: "MAC-002", last_active_at: "2025-04-02T09:15:00" },
-        { id: "uuid-3", username: "user3", email: "user3@example.com", preferred_category_id: "cat-1", device_identifier: "MAC-003", last_active_at: "2025-04-01T16:45:00" },
+        { username: "Charbel Assaker", email: "user1@example.com", preferred_category: "Islam",  device_identifier: "MAC-001", last_active_at: "2025-04-02T10:30:00" },
+        { username: "Jean-Pierre Younes", email: "user2@example.com", preferred_category: "GigaChad",  device_identifier: "MAC-002", last_active_at: "2025-04-02T09:15:00" },
+        { username: "Georges Chahine", email: "user3@example.com", preferred_category: "Jewish-1", device_identifier: "MAC-003", last_active_at: "2025-04-01T16:45:00" },
       ]);
       
       setCategories([
-        { id: "cat-1", name: "Christianity", message: "Daily verse: Love your neighbor as yourself.", enabled: true },
-        { id: "cat-2", name: "Islam", message: "Peace be upon you and Allah's mercy and blessings.", enabled: true },
-        { id: "cat-3", name: "Motivational", message: "The best way to predict the future is to create it.", enabled: false },
+        {  name: "Christianity", message: "Daily verse: Love your neighbor as yourself.", enabled: true },
+        {  name: "Islam", message: "Peace be upon you and Allah's mercy and blessings.", enabled: true },
+        {   name: "Motivational", message: "The best way to predict the future is to create it.", enabled: false },
       ]);
       
       setLogs([
@@ -107,7 +107,7 @@ function UsersSection({ users, categories, updateUser }) {
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.username.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory ? user.preferred_category_id === filterCategory : true;
+    const matchesCategory = filterCategory ? user.preferred_category === filterCategory : true;
     return matchesSearch && matchesCategory;
   });
   
@@ -171,11 +171,11 @@ function UsersSection({ users, categories, updateUser }) {
                 <tr key={user.id}>
                   <td>{user.username}</td>
                   <td>{user.email}</td>
-                  <td>{getCategoryName(user.preferred_category_id)}</td>
+                  <td>{user.preferred_category}</td>
                   <td>{user.device_identifier}</td>
                   <td>{formatDate(user.last_active_at)}</td>
                   <td>
-                    <div className="action-buttons">
+                    <div className="action-buttons_Edit_Users">
                       <button 
                         className="action-btn edit"
                         onClick={() => handleEditClick(user)}
@@ -195,7 +195,7 @@ function UsersSection({ users, categories, updateUser }) {
         </table>
       </div>
       
-      {/* Render EditUserModal when a user is being edited */}
+      {}
       {editingUser && (
         <EditUserModal
           user={editingUser}
@@ -302,7 +302,7 @@ function LogsTable({ logs, categories }) {
           <tr>
             <th>Timestamp</th>
             <th>Category</th>
-            <th>User ID</th>
+            <th>Device ID</th>
             <th>Status</th>
           </tr>
         </thead>
