@@ -14,7 +14,7 @@ function App() {
     // In a real app, this would be an API call
     setUsers(prevUsers => 
       prevUsers.map(user => 
-        user.id === userId 
+        user.device_identifier === userId 
           ? { ...user, ...updatedUserData } 
           : user
       )
@@ -29,19 +29,19 @@ function App() {
         { username: "Charbel Assaker", email: "user1@example.com", preferred_category: "Islam",  device_identifier: "MAC-001", last_active_at: "2025-04-02T10:30:00" },
         { username: "Jean-Pierre Younes", email: "user2@example.com", preferred_category: "GigaChad",  device_identifier: "MAC-002", last_active_at: "2025-04-02T09:15:00" },
         { username: "Georges Chahine", email: "user3@example.com", preferred_category: "Jewish-1", device_identifier: "MAC-003", last_active_at: "2025-04-01T16:45:00" },
-      ]);
+      ],[]);
       
       setCategories([
         {  name: "Christianity", message: "Daily verse: Love your neighbor as yourself.", enabled: true },
         {  name: "Islam", message: "Peace be upon you and Allah's mercy and blessings.", enabled: true },
         {   name: "Motivational", message: "The best way to predict the future is to create it.", enabled: false },
-      ]);
+      ],[]);
       
       setLogs([
         { id: "log-1", category_id: "cat-1", user_id: "uuid-1", status: "success", timestamp: "2025-04-02T10:35:00" },
         { id: "log-2", category_id: "cat-2", user_id: "uuid-2", status: "success", timestamp: "2025-04-02T09:20:00" },
         { id: "log-3", category_id: "cat-1", user_id: "uuid-3", status: "failure", timestamp: "2025-04-01T16:50:00" },
-      ]);
+      ],[]);
       
       setIsLoading(false);
     }, 1000);

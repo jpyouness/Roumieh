@@ -5,7 +5,8 @@ function EditUserModal({ user, categories, onSave, onCancel }) {
   const [editedUser, setEditedUser] = useState({
     username: user.username,
     email: user.email,
-    preferred_category_id: user.preferred_category_id
+    preferred_category_id: user.preferred_category_id,
+    device_identifier: user.device_identifier
   });
 
   const handleChange = (e) => {
@@ -18,7 +19,7 @@ function EditUserModal({ user, categories, onSave, onCancel }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(user.id, editedUser);
+    onSave(user.device_identifier, editedUser);
   };
 
   return (
