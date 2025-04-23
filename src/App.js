@@ -111,12 +111,6 @@ function UsersSection({ users, categories, updateUser }) {
     return matchesSearch && matchesCategory;
   });
   
-  // Get category name from ID
-  const getCategoryName = (categoryId) => {
-    const category = categories.find(cat => cat.id === categoryId);
-    return category ? category.name : "None";
-  }; // This closing brace was missing in your code
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString();
