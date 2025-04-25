@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import EditUserModal from './EditUser.js'; // Import the EditUserModal component
+import EditUserModal from './EditUser.js';
+import EditMessage from "./EditMessage.js"; 
 
 function App() {
   const [activeSection, setActiveSection] = useState("users");
@@ -11,7 +12,6 @@ function App() {
 
   // Add updateUser function
   const updateUser = (userId, updatedUserData) => {
-    // In a real app, this would be an API call
     setUsers(prevUsers => 
       prevUsers.map(user => 
         user.device_identifier === userId 
@@ -26,22 +26,22 @@ function App() {
     // Simulate API fetch
     setTimeout(() => {
       setUsers([
-        { username: "Charbel Assaker", email: "user1@example.com", preferred_category: "Islam",  device_identifier: "MAC-001", last_active_at: "2025-04-02T10:30:00" },
-        { username: "Jean-Pierre Younes", email: "user2@example.com", preferred_category: "GigaChad",  device_identifier: "MAC-002", last_active_at: "2025-04-02T09:15:00" },
-        { username: "Georges Chahine", email: "user3@example.com", preferred_category: "Jewish-1", device_identifier: "MAC-003", last_active_at: "2025-04-01T16:45:00" },
-      ],[]);
+        { username: "Charbel Assaker", email: "user1@example.com", category_id: "Islam",  device_identifier: "MAC-001", last_active_at: "2025-04-02T10:30:00" },
+        { username: "Jean-Pierre Younes", email: "user2@example.com", category_id: "Christianity",  device_identifier: "MAC-002", last_active_at: "2025-04-02T09:15:00" },
+        { username: "Georges Chahine", email: "user3@example.com", category_id: "Motivational", device_identifier: "MAC-003", last_active_at: "2025-04-01T16:45:00" },
+      ]);
       
       setCategories([
-        {  name: "Christianity", message: "Daily verse: Love your neighbor as yourself.", enabled: true },
-        {  name: "Islam", message: "Peace be upon you and Allah's mercy and blessings.", enabled: true },
-        {   name: "Motivational", message: "The best way to predict the future is to create it.", enabled: false },
-      ],[]);
+        {  category_id: "Christianity", message: "Daily verse: Love your neighbor as yourself.", enabled: true },
+        {  category_id: "Islam", message: "Peace be upon you and Allah's mercy and blessings.", enabled: true },
+        {   category_id: "Motivational", message: "The best way to predict the future is to create it.", enabled: false },
+      ]);
       
       setLogs([
-        { id: "log-1", category_id: "cat-1", user_id: "uuid-1", status: "success", timestamp: "2025-04-02T10:35:00" },
-        { id: "log-2", category_id: "cat-2", user_id: "uuid-2", status: "success", timestamp: "2025-04-02T09:20:00" },
-        { id: "log-3", category_id: "cat-1", user_id: "uuid-3", status: "failure", timestamp: "2025-04-01T16:50:00" },
-      ],[]);
+        { id: "log-1", category_id: "Islam", user_id: "uuid-1", status: "success", timestamp: "2025-04-02T10:35:00" },
+        { id: "log-2", category_id: "Chad", user_id: "uuid-2", status: "success", timestamp: "2025-04-02T09:20:00" },
+        { id: "log-3", category_id: "Motivational", user_id: "uuid-3", status: "failure", timestamp: "2025-04-01T16:50:00" },
+      ]);
       
       setIsLoading(false);
     }, 1000);
@@ -73,7 +73,7 @@ function App() {
           ) : (
             <>
               {activeSection === "users" && <UsersSection users={users} categories={categories} updateUser={updateUser} />}
-              {activeSection === "messages" && <MessagesSection categories={categories} logs={logs} />}
+              {activeSection === "messages" && <MessagesSection categories={categories} setCategories={setCategories} logs={logs} />}
             </>
           )}
         </div>
@@ -86,7 +86,6 @@ function UsersSection({ users, categories, updateUser }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [editingUser, setEditingUser] = useState(null);
-  
   // Handle edit button click
   const handleEditClick = (user) => {
     setEditingUser(user);
@@ -99,18 +98,20 @@ function UsersSection({ users, categories, updateUser }) {
   
   // Handle save user
   const handleSaveUser = (userId, updatedUserData) => {
-    updateUser(userId, updatedUserData);
-    setEditingUser(null);
+      updateUser(userId, updatedUserData);
+      setEditingUser(null);
   };
+  
+  
   
   // Filter users based on search and category filter
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.username.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory ? user.preferred_category === filterCategory : true;
+    const matchesCategory = filterCategory ? user.category_id === filterCategory : true;
     return matchesSearch && matchesCategory;
   });
-  
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString();
@@ -139,8 +140,8 @@ function UsersSection({ users, categories, updateUser }) {
           >
             <option value="">All Categories</option>
             {categories.map(category => (
-              <option key={category.id} value={category.id}>
-                {category.name}
+              <option key={category.category_id} value={category.category_id}>
+                {category.category_id}
               </option>
             ))}
           </select>
@@ -162,10 +163,10 @@ function UsersSection({ users, categories, updateUser }) {
           <tbody>
             {filteredUsers.length > 0 ? (
               filteredUsers.map(user => (
-                <tr key={user.id}>
+                <tr key={user.device_identifier}>
                   <td>{user.username}</td>
                   <td>{user.email}</td>
-                  <td>{user.preferred_category}</td>
+                  <td>{user.category_id}</td>
                   <td>{user.device_identifier}</td>
                   <td>{formatDate(user.last_active_at)}</td>
                   <td>
@@ -202,7 +203,7 @@ function UsersSection({ users, categories, updateUser }) {
   );
 }
 
-function MessagesSection({ categories, logs }) {
+function MessagesSection( {categories, logs, setCategories}) {
   const [activeTab, setActiveTab] = useState("categories");
   
   return (
@@ -225,7 +226,7 @@ function MessagesSection({ categories, logs }) {
       </div>
       
       {activeTab === "categories" ? (
-        <CategoriesTable categories={categories} />
+        <CategoriesTable categories={categories} setCategories={setCategories}/>
       ) : (
         <LogsTable logs={logs} categories={categories} />
       )}
@@ -233,7 +234,34 @@ function MessagesSection({ categories, logs }) {
   );
 }
 
-function CategoriesTable({ categories }) {
+function CategoriesTable({ categories, setCategories }) {
+  const updateCategory = (categoryName, updatedCategoryData) => {
+    setCategories(prevCategory => 
+      prevCategory.map(category => 
+        category.category_id === categoryName
+          ? { ...category, ...updatedCategoryData } 
+          : category
+      )
+    );
+  };
+
+  const [editingCategory, setEditingCategory] = useState(null);
+
+  const handleCategoryClick = (user) => {
+    setEditingCategory(user);
+  };
+  
+  // Handle cancel edit
+  const handleCancelEditt = () => {
+    setEditingCategory(null);
+  };
+  
+  // Handle save user
+  const handleSaveCategory = (categoryName, updatedCategoryData) => {
+      updateCategory(categoryName, updatedCategoryData);
+      setEditingCategory(null);
+  };
+
   return (
     <div className="table-container">
       <div className="table-actions">
@@ -251,8 +279,8 @@ function CategoriesTable({ categories }) {
         </thead>
         <tbody>
           {categories.map(category => (
-            <tr key={category.id} className={!category.enabled ? "disabled-row" : ""}>
-              <td>{category.name}</td>
+            <tr key={category.category_id} className={!category.enabled ? "disabled-row" : ""}>
+              <td>{category.category_id}</td>
               <td className="message-cell">{category.message}</td>
               <td>
                 <span className={`status-badge ${category.enabled ? "active" : "inactive"}`}>
@@ -261,7 +289,7 @@ function CategoriesTable({ categories }) {
               </td>
               <td>
                 <div className="action-buttons">
-                  <button className="action-btn edit">Edit</button>
+                  <button className="action-btn edit" onClick={handleCategoryClick}>Edit</button>
                   <button className="action-btn toggle">
                     {category.enabled ? "Disable" : "Enable"}
                   </button>
@@ -272,15 +300,24 @@ function CategoriesTable({ categories }) {
           ))}
         </tbody>
       </table>
+      {editingCategory && (
+  <EditMessage
+    categories={categories}
+    onSave={handleSaveCategory}
+    onCancel={handleCancelEditt}
+  />
+)}
+
     </div>
+    
   );
 }
 
 function LogsTable({ logs, categories }) {
   // Function to get category name
   const getCategoryName = (categoryId) => {
-    const category = categories.find(cat => cat.id === categoryId);
-    return category ? category.name : "Unknown";
+    const category = categories.find(cat => cat.category_id === categoryId);
+    return category ? category.category_id : "Unknown";
   };
   
   // Format date
@@ -294,7 +331,7 @@ function LogsTable({ logs, categories }) {
       <table className="data-table">
         <thead>
           <tr>
-            <th>Timestamp</th>
+            <th>timestamp</th>
             <th>Category</th>
             <th>Device ID</th>
             <th>Status</th>

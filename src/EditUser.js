@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-// Optional - if you want separate styling
 
 function EditUserModal({ user, categories, onSave, onCancel }) {
   const [editedUser, setEditedUser] = useState({
     username: user.username,
     email: user.email,
-    preferred_category_id: user.preferred_category_id,
+    preferred_category_id: user.category_id,
     device_identifier: user.device_identifier
   });
 
@@ -50,13 +49,13 @@ function EditUserModal({ user, categories, onSave, onCancel }) {
           <div className="form-group">
             <label>Preferred Category</label>
             <select
-              name="preferred_category_id"
-              value={editedUser.preferred_category_id}
+              name="category_id"
+              value={editedUser.category_id}
               onChange={handleChange}
             >
               {categories.map(category => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
+                <option key={category.category_id} value={category.category_id}>
+                  {category.category_id}
                 </option>
               ))}
             </select>
