@@ -247,8 +247,8 @@ function CategoriesTable({ categories, setCategories }) {
 
   const [editingCategory, setEditingCategory] = useState(null);
 
-  const handleCategoryClick = (user) => {
-    setEditingCategory(user);
+  const handleCategoryClick = (category) => {
+    setEditingCategory(category);
   };
   
   // Handle cancel edit
@@ -261,6 +261,17 @@ function CategoriesTable({ categories, setCategories }) {
       updateCategory(categoryName, updatedCategoryData);
       setEditingCategory(null);
   };
+
+  const toggleEnable = (category) => {
+    setCategories(prevCategories =>
+      prevCategories.map(item =>
+        item.category_id === category.category_id
+          ? { ...item, enabled: !item.enabled }
+          : item
+      )
+    );
+  };
+  
 
   return (
     <div className="table-container">
@@ -289,8 +300,8 @@ function CategoriesTable({ categories, setCategories }) {
               </td>
               <td>
                 <div className="action-buttons">
-                  <button className="action-btn edit" onClick={handleCategoryClick}>Edit</button>
-                  <button className="action-btn toggle">
+                  <button className="action-btn edit" onClick={() => handleCategoryClick(category)}>Edit</button>
+                  <button className="action-btn toggle" onClick={() => toggleEnable(category)}>
                     {category.enabled ? "Disable" : "Enable"}
                   </button>
                   <button className="action-btn delete">Delete</button>
@@ -302,7 +313,7 @@ function CategoriesTable({ categories, setCategories }) {
       </table>
       {editingCategory && (
   <EditMessage
-    categories={categories}
+    category={editingCategory}
     onSave={handleSaveCategory}
     onCancel={handleCancelEditt}
   />

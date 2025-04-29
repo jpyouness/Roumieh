@@ -1,16 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Import useEffect
 
 function EditUserModal({ user, categories, onSave, onCancel }) {
-  const [editedUser, setEditedUser] = useState({
-    username: user.username,
-    email: user.email,
-    preferred_category_id: user.category_id,
-    device_identifier: user.device_identifier
+  // Use state keys that match the user data structure ('category_id')
+  const [editedUserData, setEditedUserData] = useState({
+    username: '',
+    email: '',
+    category_id: '', // Use 'category_id' consistently
   });
+
+  // Use useEffect to safely initialize state when the 'user' prop changes
+  useEffect(() => {
+    if (user) {
+      setEditedUserData({
+        username: user.username || '',
+        email: user.email || '',
+        category_id: user.category_id || '', // Initialize using 'category_id'
+      });
+    } else {
+      // Optional: Reset form if user becomes null
+      setEditedUserData({ username: '', email: '', category_id: '' });
+    }
+  }, [user]); // Rerun when user prop changes
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEditedUser(prev => ({
+    setEditedUserData(prev => ({
       ...prev,
       [name]: value
     }));
@@ -18,41 +32,55 @@ function EditUserModal({ user, categories, onSave, onCancel }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(user.device_identifier, editedUser);
+    // Clean the data: only send back fields meant to be updated
+    const updatedDataToSend = {
+        username: editedUserData.username,
+        email: editedUserData.email,
+        category_id: editedUserData.category_id // Use the consistent state key
+    };
+    onSave(user.device_identifier, updatedDataToSend);
   };
+
+  if (!user) return null; // Don't render if no user
 
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h2>Edit User</h2>
+        <h2>Edit User: {editedUserData.username}</h2>
         <form onSubmit={handleSubmit}>
+          {/* Username Input */}
           <div className="form-group">
             <label>Username</label>
             <input
               type="text"
               name="username"
-              value={editedUser.username}
+              value={editedUserData.username}
               onChange={handleChange}
               required
             />
           </div>
+          {/* Email Input */}
           <div className="form-group">
             <label>Email</label>
             <input
               type="email"
               name="email"
-              value={editedUser.email}
+              value={editedUserData.email}
               onChange={handleChange}
               required
             />
           </div>
+          {/* Category Dropdown */}
           <div className="form-group">
             <label>Preferred Category</label>
             <select
-              name="category_id"
-              value={editedUser.category_id}
-              onChange={handleChange}
+              name="category_id"                 // Name is "category_id"
+              value={editedUserData.category_id} // FIX: Value bound to state.category_id
+              onChange={handleChange}           // Handler updates state.category_id
+              required
             >
+              {/* Optional: Add a default disabled option if needed */}
+              {/* <option value="" disabled>Select a category</option> */}
               {categories.map(category => (
                 <option key={category.category_id} value={category.category_id}>
                   {category.category_id}
@@ -60,6 +88,7 @@ function EditUserModal({ user, categories, onSave, onCancel }) {
               ))}
             </select>
           </div>
+          {/* Actions */}
           <div className="modal-actions">
             <button type="submit" className="save-btn">Save</button>
             <button type="button" className="cancel-btn" onClick={onCancel}>
