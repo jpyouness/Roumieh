@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import EditUserModal from './EditUser.js';
 import EditMessage from "./EditMessage.js"; 
-
+import DeleteCategoryForm from "./ConfirmDeleteCategory.js";
 function App() {
   const [activeSection, setActiveSection] = useState("users");
   const [users, setUsers] = useState([]);
@@ -246,14 +246,22 @@ function CategoriesTable({ categories, setCategories }) {
   };
 
   const [editingCategory, setEditingCategory] = useState(null);
-
+  const [DeletingCategory, setDeletingCategory] = useState(null);
   const handleCategoryClick = (category) => {
     setEditingCategory(category);
   };
+
+  const handleDeleteCategoryClick = (category) => {
+    setDeletingCategory(category);
+  };
   
   // Handle cancel edit
-  const handleCancelEditt = () => {
+  const handleCancelEditCategory = () => {
     setEditingCategory(null);
+  };
+
+  const handleCancelDeleteCategory = () => {
+    setDeletingCategory(null);
   };
   
   // Handle save user
@@ -271,7 +279,6 @@ function CategoriesTable({ categories, setCategories }) {
       )
     );
   };
-  
 
   return (
     <div className="table-container">
@@ -304,7 +311,8 @@ function CategoriesTable({ categories, setCategories }) {
                   <button className="action-btn toggle" onClick={() => toggleEnable(category)}>
                     {category.enabled ? "Disable" : "Enable"}
                   </button>
-                  <button className="action-btn delete">Delete</button>
+                  <button className="action-btn delete" onClick={() => handleDeleteCategoryClick(category)}
+>Delete</button>
                 </div>
               </td>
             </tr>
@@ -315,10 +323,15 @@ function CategoriesTable({ categories, setCategories }) {
   <EditMessage
     category={editingCategory}
     onSave={handleSaveCategory}
-    onCancel={handleCancelEditt}
+    onCancel={handleCancelEditCategory}
+  />)}
+  {DeletingCategory && (
+    <DeleteCategoryForm
+    category={DeletingCategory.category_id}
+    onCancel={handleCancelDeleteCategory}
+    updateCategories={setCategories}
   />
-)}
-
+  )}
     </div>
     
   );
