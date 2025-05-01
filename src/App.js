@@ -3,6 +3,8 @@ import "./App.css";
 import EditUserModal from './EditUser.js';
 import EditMessage from "./EditMessage.js"; 
 import DeleteCategoryForm from "./ConfirmDeleteCategory.js";
+import AddCategoryForm from "./AddCategoryForm";
+
 function App() {
   const [activeSection, setActiveSection] = useState("users");
   const [users, setUsers] = useState([]);
@@ -280,10 +282,19 @@ function CategoriesTable({ categories, setCategories }) {
     );
   };
 
+  const [showAddForm, setShowAddForm] = useState(false);
+
+  const handleAddCategory = (newCategory) => {
+    setCategories((prev) => [...prev, newCategory]);
+    setShowAddForm(false);
+  };
+  
+  const handleCancelAdd = () => setShowAddForm(false);
+  
   return (
     <div className="table-container">
       <div className="table-actions">
-        <button className="add-btn">Add New Category</button>
+        <button className="add-btn" onClick={() => setShowAddForm(true)}>Add New Category</button>
       </div>
       
       <table className="data-table">
@@ -332,6 +343,13 @@ function CategoriesTable({ categories, setCategories }) {
     updateCategories={setCategories}
   />
   )}
+
+    {showAddForm && (
+      <AddCategoryForm
+        onSave={handleAddCategory}
+        onCancel={handleCancelAdd}
+      />
+)}
     </div>
     
   );

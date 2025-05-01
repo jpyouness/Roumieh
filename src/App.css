@@ -413,3 +413,18 @@ body {
 .cancel-btn:hover {
   background-color: rgba(139, 92, 246, 0.2);
 }
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.form-row label {
+  min-width: 100px; /* Optional: ensures labels are aligned */
+}
+
+input[type="text"] {
+  flex: 1;
+}
