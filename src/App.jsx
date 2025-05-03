@@ -118,6 +118,18 @@ function UsersSection({ users, categories, updateUser }) {
     return date.toLocaleString();
   };
 
+  useEffect(() => {
+    const debugUserAndCategories = () => {
+      console.log("=== DEBUG: Current User Data ===");
+      console.log(users);
+  
+      console.log("=== DEBUG: Current Categories ===");
+      console.log(categories);
+    };
+  
+    debugUserAndCategories();
+  }, [users, categories]);
+
   return (
     <div className="section">
       <h2 className="section-title">Users Management</h2>
@@ -240,11 +252,7 @@ function CategoriesTable({ categories, setCategories }) {
           ? { ...category, ...updatedCategoryData } 
           : category
       )
-    );
-    const nextCategoryID = categories.length > 0
-    ? Math.max(...categories.map(c => c.categoryID)) + 1
-    : 1;
-  };
+    );}
 
   const [editingCategory, setEditingCategory] = useState(null);
   const [DeletingCategory, setDeletingCategory] = useState(null);
@@ -290,8 +298,7 @@ function CategoriesTable({ categories, setCategories }) {
   
   const handleCancelAdd = () => setShowAddForm(false);
   
-  const nextCategoryID  = categories.length+1;
-
+  const nextCategoryID  = String(categories.length+1);
   return (
     <div className="table-container">
       <div className="table-actions">
