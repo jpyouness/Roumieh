@@ -5,7 +5,7 @@ function EditUserModal({ user, categories, onSave, onCancel }) {
   const [editedUserData, setEditedUserData] = useState({
     username: '',
     email: '',
-    category_id: '', // Use 'category_id' consistently
+    categoryName: '', // Use 'category_id' consistently
   });
 
   // Use useEffect to safely initialize state when the 'user' prop changes
@@ -14,11 +14,11 @@ function EditUserModal({ user, categories, onSave, onCancel }) {
       setEditedUserData({
         username: user.username || '',
         email: user.email || '',
-        category_id: user.category_id || '', // Initialize using 'category_id'
+        categoryName: user.categoryName || '', // Initialize using 'category_id'
       });
     } else {
       // Optional: Reset form if user becomes null
-      setEditedUserData({ username: '', email: '', category_id: '' });
+      setEditedUserData({ username: '', email: '', categoryName: '' });
     }
   }, [user]); // Rerun when user prop changes
 
@@ -36,7 +36,7 @@ function EditUserModal({ user, categories, onSave, onCancel }) {
     const updatedDataToSend = {
         username: editedUserData.username,
         email: editedUserData.email,
-        category_id: editedUserData.category_id // Use the consistent state key
+        categoryName: editedUserData.categoryName // Use the consistent state key
     };
     onSave(user.device_identifier, updatedDataToSend);
   };
@@ -74,16 +74,16 @@ function EditUserModal({ user, categories, onSave, onCancel }) {
           <div className="form-group">
             <label>Preferred Category</label>
             <select
-              name="category_id"                 // Name is "category_id"
-              value={editedUserData.category_id} // FIX: Value bound to state.category_id
+              name="categoryName"                 // Name is "category_id"
+              value={editedUserData.categoryName} // FIX: Value bound to state.category_id
               onChange={handleChange}           // Handler updates state.category_id
               required
             >
               {/* Optional: Add a default disabled option if needed */}
               {/* <option value="" disabled>Select a category</option> */}
               {categories.map(category => (
-                <option key={category.category_id} value={category.category_id}>
-                  {category.category_id}
+                <option key={category.categoryID} value={category.categoryName}>
+                  {category.categoryName}
                 </option>
               ))}
             </select>

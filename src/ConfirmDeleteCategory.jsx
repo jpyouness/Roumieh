@@ -5,7 +5,7 @@ function DeleteCategoryForm({ category, onCancel, updateCategories }) {
     e.preventDefault(); // 🛑 Prevent form from reloading the page!
 
     updateCategories(prevCategories =>
-      prevCategories.filter(c => c.category_id !== category)
+      prevCategories.filter(c => c.categoryID !== category.categoryID)
     );
 
     onCancel(); // ✅ Close the modal after deletion
@@ -16,7 +16,7 @@ function DeleteCategoryForm({ category, onCancel, updateCategories }) {
       <div className="modal">
         <h2>Delete Category</h2>
         <form onSubmit={handleSubmit}>
-          <p>Are you sure you want to delete the category <strong>{category}</strong>?</p>
+          <p>Are you sure you want to delete the category <strong>{category.categoryName}</strong>?</p>
           <div className="modal-actions">
             <button type="submit">Save</button>
             <button type="button" className="cancel-btn" onClick={onCancel}>

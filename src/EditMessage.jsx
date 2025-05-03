@@ -11,16 +11,15 @@ function EditMessage({ category, onSave, onCancel }) {
     if (category) {
       // Initialize state with the message from the category prop
       setEditedMessageContent(category.message || '');
-      setEditedCategory(category.category_id || '');
+      setEditedCategory(category.categoryName || '');
       // No need to handle 'enabled' anymore
     } else {
       // Optional: Reset form if category becomes null (e.g., modal closes)
       setEditedMessageContent('');
       setEditedCategory('');
     }
-  }, [category]); // Dependency array: run effect when 'category' prop changes
+  }, [category]); 
 
-  // 4. Specific handler for the message input change
   const handleMessageChange = (e) => {
     setEditedMessageContent(e.target.value);
   };
@@ -28,20 +27,15 @@ function EditMessage({ category, onSave, onCancel }) {
   const handleCategoryChange = (e) => {
     setEditedCategory(e.target.value);
   };
-  // 5. Fix handleSubmit to send only the updated message data
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Create an object containing ONLY the field(s) meant to be updated
     const updatedDataToSend = {
         message: editedMessageContent,
-        category_id: editedCategory,
-        // 'enabled' field is removed
+        categoryName: editedCategory,
     };
-    // Pass the original category ID and the cleaned update object
-    onSave(category.category_id, updatedDataToSend);
+    onSave(category.categoryID, updatedDataToSend);
   };
 
-  // Prevent rendering if the category prop isn't available yet
   if (!category) {
     return null;
   }
@@ -56,14 +50,10 @@ function EditMessage({ category, onSave, onCancel }) {
             <label>Category Name</label>
             <input
               type="text"
-              name="category_id"
+              name="categoryName"
               value={editedCategory}
-              onChange={handleCategoryChange} // Use specific handler
+              onChange={handleCategoryChange} 
               required
-               // Display original ID from prop
-               // Display original ID from prop
-               // Make the category name uneditable in this form
-             // Optional: Add class for styling read-only fields
             />
           </div>
           {}
@@ -71,13 +61,13 @@ function EditMessage({ category, onSave, onCancel }) {
             <label>Message Content</label>
             <input
               type="text"
-              name="message" // Important: name matches the data field key
-              value={editedMessageContent} // Bind value to state
-              onChange={handleMessageChange} // Use specific handler
+              name="message"
+              value={editedMessageContent} 
+              onChange={handleMessageChange} 
               required
             />
           </div>
-          {/* 'enabled' field completely removed */}
+          {}
           <div className="modal-actions">
             <button type="submit" >Save</button>
             <button type="button" className="cancel-btn" onClick={onCancel}>

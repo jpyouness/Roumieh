@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-function AddCategoryForm({ onSave, onCancel }) {
-  const [categoryId, setCategoryId] = useState("");
+function AddCategoryForm({ onSave, onCancel, nextCategoryID }) {
+  const [categoryName, setCategoryName] = useState("");
   const [message, setMessage] = useState("");
   const [enabled, setEnabled] = useState(true);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave({ category_id: categoryId, message, enabled });
+    onSave({
+      categoryName,
+      categoryID: nextCategoryID,
+      message,
+      enabled
+    });
   };
 
   return (
@@ -16,11 +21,11 @@ function AddCategoryForm({ onSave, onCancel }) {
         <h2>Add New Category</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-row">
-            <label>Category ID:</label>
+            <label>Category Name:</label>
             <input
               type="text"
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
               required
             />
           </div>
@@ -52,5 +57,4 @@ function AddCategoryForm({ onSave, onCancel }) {
     </div>
   );
 }
-
 export default AddCategoryForm;
