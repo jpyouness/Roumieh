@@ -28,21 +28,21 @@ function App() {
     // Simulate API fetch
     setTimeout(() => {
       setUsers([
-        { username: "Charbel Assaker", email: "user1@example.com", categoryName: "Islam",  device_identifier: "MAC-001", last_active_at: "2025-04-02T10:30:00" },
-        { username: "Jean-Pierre Younes", email: "user2@example.com", categoryName: "Christianity",  device_identifier: "MAC-002", last_active_at: "2025-04-02T09:15:00" },
-        { username: "Georges Chahine", email: "user3@example.com", categoryName: "Motivational", device_identifier: "MAC-003", last_active_at: "2025-04-01T16:45:00" },
+        { username: "Charbel Assaker", email: "user1@example.com", categoryID: "2",  device_identifier: "MAC-001", last_active_at: "2025-04-02T10:30:00" },
+        { username: "Jean-Pierre Younes", email: "user2@example.com", categoryID: "1",  device_identifier: "MAC-002", last_active_at: "2025-04-02T09:15:00" },
+        { username: "Georges Chahine", email: "user3@example.com", categoryID: "3", device_identifier: "MAC-003", last_active_at: "2025-04-01T16:45:00" },
       ]);
       
       setCategories([
-        {  categoryName: "Christianity",categoryID: "001",message: "Daily verse: Love your neighbor as yourself.", enabled: true },
-        {  categoryName: "Islam",categoryID:"002", message: "Peace be upon you and Allah's mercy and blessings.", enabled: true },
-        {   categoryName: "Motivational",categoryID:"003", message: "The best way to predict the future is to create it.", enabled: false },
+        {  categoryName: "Christianity",categoryID: "1",message: "Daily verse: Love your neighbor as yourself.", enabled: true },
+        {  categoryName: "Islam",categoryID:"2", message: "Peace be upon you and Allah's mercy and blessings.", enabled: true },
+        {   categoryName: "Motivational",categoryID:"3", message: "The best way to predict the future is to create it.", enabled: false },
       ]);
       
       setLogs([
-        { logID: "log-1", categoryID: "001", device_identifier: "uuid-1", status: "success", timestamp: "2025-04-02T10:35:00" },
-        { logID: "log-2", categoryID: "002", device_identifier: "uuid-2", status: "success", timestamp: "2025-04-02T09:20:00" },
-        { logID: "log-3", categoryID: "032", device_identifier: "uuid-3", status: "failure", timestamp: "2025-04-01T16:50:00" },
+        { logID: "log-1", categoryID: "1", device_identifier: "uuid-1", status: "success", timestamp: "2025-04-02T10:35:00" },
+        { logID: "log-2", categoryID: "2", device_identifier: "uuid-2", status: "success", timestamp: "2025-04-02T09:20:00" },
+        { logID: "log-3", categoryID: "32", device_identifier: "uuid-3", status: "failure", timestamp: "2025-04-01T16:50:00" },
       ]);
       
       setIsLoading(false);
@@ -106,11 +106,10 @@ function UsersSection({ users, categories, updateUser }) {
   
   
   
-  // Filter users based on search and category filter
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.username.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory ? user.categoryName === filterCategory : true;
+    const matchesCategory = filterCategory ? user.categoryID === filterCategory : true;
     return matchesSearch && matchesCategory;
   });
 
@@ -141,7 +140,7 @@ function UsersSection({ users, categories, updateUser }) {
           >
             <option value="">All Categories</option>
             {categories.map(category => (
-              <option key={category.categoryID} value={category.categoryName}>
+              <option key={category.categoryID} value={category.categoryID}>
                 {category.categoryName}
               </option>
             ))}
@@ -167,7 +166,7 @@ function UsersSection({ users, categories, updateUser }) {
                 <tr key={user.device_identifier}>
                   <td>{user.username}</td>
                   <td>{user.email}</td>
-                  <td>{user.categoryName}</td>
+                  <td>{categories.find(cat => cat.categoryID === user.categoryID)?.categoryName || "Unkown"}</td>
                   <td>{user.device_identifier}</td>
                   <td>{formatDate(user.last_active_at)}</td>
                   <td>
@@ -292,9 +291,7 @@ function CategoriesTable({ categories, setCategories }) {
   const handleCancelAdd = () => setShowAddForm(false);
   
   const nextCategoryID  = categories.length+1;
-  
-  
-  
+
   return (
     <div className="table-container">
       <div className="table-actions">
